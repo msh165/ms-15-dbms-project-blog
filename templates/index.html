@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width, initial-scale=1.0">
+    <title>Index Page</title>
+</head>
+<body>
+    <h1>Hey there Brother!!!</h1>
+    <h2>How are you {{ first_name|upper }}</h2>
+
+
+    {% for item in food %}
+        {{ item }}
+        <br>
+    {% endfor %}
+    
+</body>
+</html>
