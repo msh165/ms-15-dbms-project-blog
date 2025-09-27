@@ -1,11 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>{% block title %}My Site{% endblock %}</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
 <body>
-  {% block content %}
-  {% endblock %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{{ url_for('home') }}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('name') }}">Link</a>
+        </li>
+    </div>
+  </div>
+</nav>
+
+{% block content %}
+{% endblock %}
+
+<!-- Bootstrap 5 JS bundle is needed for interactive components: -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-pq84UIS7xT6Dk3UzWdV1KuIGvM8gZT/I8g3o0GiVFRl1+0AcR6lJY3JZ25rFFu4p" crossorigin="anonymous"></script>
 </body>
 </html>
