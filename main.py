@@ -43,6 +43,10 @@ class NamerForm(FlaskForm):
     submit = SubmitField("Submit")
 
 
+class PasswordForm(FlaskForm):
+    email =StringField("Email", validators=[DataRequired()])
+    password_hash =PasswordField("Password", validators=[DataRequired()])
+    submit = SubmitField("Submit")
 
 #Creating our model
 class Users(db.Model):
@@ -52,7 +56,7 @@ class Users(db.Model):
     color = db.Column(db.String(120))
     date_added = db.Column(db.DateTime, default = datetime.now())
     
-    password_hash = db.Column(db.String(120))
+    password_hash = db.Column(db.String(512))
 
 
     # This is a "getter" method. 
@@ -137,25 +141,41 @@ def home():
     return render_template('index.html')
     # return "Hey"
 
-@app.route("/name",methods = ['GET','POST'])
-def name():
-    name= None# why we did this?
+@app.route("/test_pw",methods = ['GET','POST'])
+def test_pw():
+    email = None
+    password_hash= None# why we did this?
+    pw_to_check = None
+    passed = None
+    form = PasswordForm()
+    
     #when the page loads for the first time, there would be no name.
     #THat would be input by the user, but our render template expects a name
     #hence we are adding the variable, which would then get replaced y the user input
-    form = NamerForm() #this is our form class we created above
+    # form = NamerForm() #this is our form class we created above
 
     #validate stuf
     if form.validate_on_submit():
-        name = form.name.data
-        form.name.data=''
+        email = form.email.data
+        password = form.password_hash.data
+        form.email.data=''
+        form.password_hash.data=''
+
+        pw_to_check = Users.query.filter_by(email=email).first()
+        # print(pw_to_check.password_hash)
+
+        passed = check_password_hash(pw_to_check.password_hash,password)
+        print(passed)
         flash("Form successfully filled")
         """
         So when somebody fills the form, take info from there and update my name vairable
         """
 
-    return render_template('name.html',
-                           name=name,
+    return render_template('test_pw.html',
+                           email=email,
+                           password_hash = password_hash,
+                           passed = passed,
+                           pw_to_check = pw_to_check,
                            form=form)
 
 
@@ -172,8 +192,9 @@ def add_user():
         #if we get null output, then email DNE and user can be created
 
         if user is None:
+            print("Inside here1")
             print(f"Password for {form.name.data} is {generate_password_hash(form.password_hash.data)}")
-            hashed_pw = generate_password_hash(form.password_hash.data,"asd123")
+            hashed_pw = generate_password_hash(form.password_hash.data)
             user = Users(
                 name = form.name.data,
                 email = form.email.data,
@@ -184,6 +205,7 @@ def add_user():
             db.session.commit()
             flash("User Added successfuly")
         else:
+            print("Inside here2")
             flash(f"Email ID {form.email.data} already exists")
         name = form.name.data #we do this to give a confirmation
         form.name.data=''

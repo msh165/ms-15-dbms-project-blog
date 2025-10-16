@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% for message in get_flashed_messages() %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+
+{% if email %}
+<!-- IF successfully submitted -->
+ <div  class="container" style="max-width: 500px; margin-top: 50px;">
+    <h1>Hello {{ email }}</h1>
+    <h1>Password : {{ password_hash }}</h1>
+    
+    <h1>Info for this PW : </h1>
+    <h2>Name : {{ pw_to_check.name }}</h2>
+    <h2>Email : {{ pw_to_check.email }}</h2>
+    <h2>Correct Password : {{ passed }}</h2>
+
+
+</div>
+    <!-- <img src="{{ url_for('static', filename='images/world.jpg') }}" class="img-fluid" style="max-width: 80%; height: 50vh;" alt="World image"> -->
+{% else %}
+<h1>Enter your email and PW</h1>
+
+<div class="container" style="max-width: 500px; margin-top: 50px;">
+
+    <form method="post">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3"> {{ form.email.label(class="form-label") }}
+            {{ form.email(class="form-control") }}
+        </div>
+
+        <div class="mb-3"> {{ form.password_hash.label(class="form-label") }}
+            {{ form.password_hash(class="form-control") }}
+        </div>
+
+        <br> {{ form.submit(class="btn btn-secondary") }}
+    </form>
+
+</div>
+    {% endif %}
+
+    {% endblock %}
