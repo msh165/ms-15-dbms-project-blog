@@ -1,6 +1,6 @@
 from flask import Flask, render_template,flash,request #flash is for flashing messages on top, success, rejects
 from flask_wtf import FlaskForm
-from wtforms import StringField,SubmitField,PasswordField,BooleanField,ValidationError #string is input box, submit is the submit button
+from wtforms import StringField,SubmitField,PasswordField,BooleanField,ValidationError,TextAreaField #string is input box, submit is the submit button
 from wtforms.validators import DataRequired,EqualTo,Length #Validate your inputs, points out when blank
 
 from flask_sqlalchemy import SQLAlchemy
@@ -11,7 +11,7 @@ from flask_migrate import Migrate
 
 from werkzeug.security import check_password_hash,generate_password_hash
 
-from wtfforms.widgets import TextArea
+# from wtforms.widgets import TextAreaField
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "your_random_secret_key_here"
@@ -53,10 +53,10 @@ class PasswordForm(FlaskForm):
 
 class PostForm(FlaskForm):
     title = StringField("Title",validators=[DataRequired()])
-    content = StringField("content",validators=[DataRequired()],widget=TextArea)
+    content = TextAreaField("content",validators=[DataRequired()])
     author = StringField("author",validators=[DataRequired()])
     slug = StringField("slug",validators=[DataRequired()])
-    submit = StringField("Submit")
+    submit = SubmitField("Submit")
 
 
 
@@ -160,7 +160,10 @@ def delete_user(id):
 
 
 
-
+@app.route("/posts")
+def posts():
+    posts=Posts.query.order_by(Posts.date_posted)
+    return render_template('posts.html',posts=posts)
 
 
 @app.route("/")
@@ -268,6 +271,7 @@ def add_post():
         db.session.add(post)
         db.session.commit()
         flash("Blog post submitted successfully")
+    return render_template('add_post.html',form=form)
 
 
 @app.errorhandler(404)
