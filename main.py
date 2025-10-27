@@ -11,6 +11,8 @@ from flask_migrate import Migrate
 
 from werkzeug.security import check_password_hash,generate_password_hash
 
+from wtfforms.widgets import TextArea
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "your_random_secret_key_here"
 
@@ -47,6 +49,17 @@ class PasswordForm(FlaskForm):
     email =StringField("Email", validators=[DataRequired()])
     password_hash =PasswordField("Password", validators=[DataRequired()])
     submit = SubmitField("Submit")
+
+
+class PostForm(FlaskForm):
+    title = StringField("Title",validators=[DataRequired()])
+    content = StringField("content",validators=[DataRequired()],widget=TextArea)
+    author = StringField("author",validators=[DataRequired()])
+    slug = StringField("slug",validators=[DataRequired()])
+    submit = StringField("Submit")
+
+
+
 
 #Creating our model
 class Users(db.Model):
@@ -85,6 +98,20 @@ class Users(db.Model):
 
     def  __repr__(self):#this tells the name of the table that can be called
         return super().__repr__()
+
+
+
+
+
+#Creating a blog post model
+class Posts(db.Model):
+    id = db.Column(db.Integer,primary_key=True)
+    title = db.Column(db.String(255))
+    content = db.Column(db.Text)
+    author = db.Column(db.String(255))
+    date_posted = db.Column(db.DateTime,default = datetime.now())
+
+    slug = db.Column(db.String(255))#Slug appears in the URL bar, looks better than just the post_id
 
 
 
@@ -216,6 +243,31 @@ def add_user():
     all_users = Users.query.order_by(Users.date_added)
     return render_template("add_user.html", form=form,name=name,all_users=all_users)
 
+
+
+#Add Post Page
+@app.route('/add-post',methods = ["GET","POST"])
+def add_post():
+    form = PostForm() 
+
+    if form.validate_on_submit():
+        post = Posts(
+            title = form.title.data,
+            content = form.content.data,
+            author = form.author.data,
+            slug = form.slug.data
+        )
+        
+        #Clear the form
+        form.title.data = ''
+        form.content.data = ''
+        form.author.data = ''
+        form.slug.data = ''
+        
+        #add post data to db
+        db.session.add(post)
+        db.session.commit()
+        flash("Blog post submitted successfully")
 
 
 @app.errorhandler(404)
