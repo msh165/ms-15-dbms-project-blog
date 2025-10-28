@@ -14,7 +14,6 @@
   <h1 class="mb-4">Blog Posts...</h1>
 
   {# --- Blog Post Loop --- #}
-  {% for post in posts %}
     <div class="card mb-3">
       <div class="card-body">
         <h3 class="card-title">{{ post.title }}</h3>
@@ -31,8 +30,5 @@
 
       </div>
     </div>
-  {% else %}
-    <p>No blog posts found.</p>
-  {% endfor %}
 
 {% endblock %}

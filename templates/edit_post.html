@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+  {# --- Flash Messages --- #}
+  {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endfor %}
+<h1>Add BLOG</h1>
+<!-- Form section - always shown, not full height -->
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <form method="post">
+        {{ form.hidden_tag() }} 
+        
+        <h2 class="text-center mb-4">Add User</h2>
+        
+        <div class="mb-3">
+          {{ form.title.label(class="form-label") }}
+          {{ form.title(class="form-control") }}
+        </div>
+        
+        <div class="mb-3">
+          {{ form.author.label(class="form-label") }}
+          {{ form.author(class="form-control") }}
+        </div>
+
+        <div class="mb-3">
+          {{ form.content.label(class="form-label") }}
+          {{ form.content(class="form-control",rows='5') }}
+        </div>
+
+        <div class="mb-3">
+          {{ form.slug.label(class="form-label") }}
+          {{ form.slug(class="form-control") }}
+        </div>
+
+        <div class="text-center">
+          {{ form.submit(class="btn btn-primary") }}
+        </div>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}
