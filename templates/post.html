@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+  {# --- Flash Messages --- #}
+  {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endfor %}
+
+
+  <h1 class="mb-4">Blog Posts...</h1>
+
+  {# --- Blog Post Loop --- #}
+  {% for post in posts %}
+    <div class="card mb-3">
+      <div class="card-body">
+        <h3 class="card-title">{{ post.title }}</h3>
+        
+        <p class="card-text">{{ post.content }}</p>
+        
+        <p class="card-text">
+          <small class="text-muted">
+            By: {{ post.author }} <br>
+            Posted: {{ post.date_posted.strftime('%Y-%m-%d') }} <br>
+            Slug: {{ post.slug }}
+          </small>
+        </p>
+
+      </div>
+    </div>
+  {% else %}
+    <p>No blog posts found.</p>
+  {% endfor %}
+
+{% endblock %}

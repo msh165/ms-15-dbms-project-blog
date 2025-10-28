@@ -160,10 +160,6 @@ def delete_user(id):
 
 
 
-@app.route("/posts")
-def posts():
-    posts=Posts.query.order_by(Posts.date_posted)
-    return render_template('posts.html',posts=posts)
 
 
 @app.route("/")
@@ -246,6 +242,17 @@ def add_user():
     all_users = Users.query.order_by(Users.date_added)
     return render_template("add_user.html", form=form,name=name,all_users=all_users)
 
+
+@app.route("/posts/<int:id>")
+def post(id):
+    post = Posts.query.get_or_404(id)
+    return render_template("post.html")
+
+
+@app.route("/posts")
+def posts():
+    posts=Posts.query.order_by(Posts.date_posted)
+    return render_template('posts.html',posts=posts)
 
 
 #Add Post Page
