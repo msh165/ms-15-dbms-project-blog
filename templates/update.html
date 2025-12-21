@@ -3,51 +3,65 @@
 {% block content %}
 
 {% for message in get_flashed_messages() %}
-<div class="alert alert-warning alert-dismissible fade show" role="alert">
-    {{ message }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
+	
+	<div class="alert alert-warning alert-dismissible fade show" role="alert">
+	  {{ message }}
+	  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+
+	
 {% endfor %}
 
-{% if name %}
-<!-- IF successfully submitted -->
-    <h1>Hello {{ name }}</h1>
-    <!-- <img src="{{ url_for('static', filename='images/world.jpg') }}" class="img-fluid" style="max-width: 80%; height: 50vh;" alt="World image"> -->
+{% if id == current_user.id %}
+
+	<h1>Update User...</h1>
+	<br/>
+<div class="shadow p-3 mb-5 bg-body rounded">
+	<form action="/update/{{ name_to_update.id }}" method="POST">
+		{{ form.hidden_tag() }}
+
+		{{ form.name.label(class="form-label") }}
+
+		{{ form.name(class="form-control", value=name_to_update.name) }}
+		<br/>
+
+		{{ form.username.label(class="form-label") }}
+
+		{{ form.username(class="form-control", value=name_to_update.username) }}
+		<br/>
+
+		{{ form.email.label(class="form-label") }}
+
+		{{ form.email(class="form-control", value=name_to_update.email) }}
+		<br/>
+		
+		{{ form.favorite_color.label(class="form-label") }}
+
+		{{ form.favorite_color(class="form-control", value=name_to_update.favorite_color) }}
+
+		
+
+		<br/>
+		
+		{{ form.submit(class="btn btn-secondary") }}
+
+		<a href="{{ url_for('delete', id=id)}}" class="btn btn-danger">Delete</a>
+
+
+	</form>
+</div>
+<br/><br/><br/>
+
+{% else %}
+ <div class="alert alert-warning alert-dismissible fade show" role="alert">
+	  Sorry! You Can't Edit This User...
+	  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+
+	<h2>Access Denied!</h2>
+	<p>Sorry, you cannot access this user profile...</p>
+
 {% endif %}
 
-<!-- Form section - always shown, not full height -->
-<div class="container mt-4">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <form action="/update/{{ user_to_update.id }}" method="post">
-        {{ form.hidden_tag() }} 
-        
-        <h2 class="text-center mb-4">Update User {{ user_to_update.name }}</h2>
-        
-        <div class="mb-3">
-          {{ form.name.label(class="form-label") }}
-          {{ form.name(class="form-control", value=user_to_update.name ) }}
-        </div>
-        
-        <div class="mb-3">
-          {{ form.email.label(class="form-label") }}
-          {{ form.email(class="form-control",value=user_to_update.email) }}
-        </div>
 
-        <div class="mb-3">
-          {{ form.color.label(class="form-label") }}
-          {{ form.color(class="form-control",value=user_to_update.color) }}
-        </div>
-        
-        <div class="text-center">
-          {{ form.submit(class="btn btn-primary") }}
-        </div>
-
-        <div class="text-center">
-          <a href="{{ url_for('delete_user', id=user_to_update.id)}}">Delete User</a>
-        </div>
-      </form>
-    </div>
-  </div>
-  
 {% endblock %}

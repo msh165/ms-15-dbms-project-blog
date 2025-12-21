@@ -3,46 +3,51 @@
 {% block content %}
 
 {% for message in get_flashed_messages() %}
-<div class="alert alert-warning alert-dismissible fade show" role="alert">
-    {{ message }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
+	
+	<div class="alert alert-warning alert-dismissible fade show" role="alert">
+	  {{ message }}
+	  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+
+	
 {% endfor %}
 
+
 {% if email %}
-<!-- IF successfully submitted -->
- <div  class="container" style="max-width: 500px; margin-top: 50px;">
-    <h1>Hello {{ email }}</h1>
-    <h1>Password : {{ password_hash }}</h1>
-    
-    <h1>Info for this PW : </h1>
-    <h2>Name : {{ pw_to_check.name }}</h2>
-    <h2>Email : {{ pw_to_check.email }}</h2>
-    <h2>Correct Password : {{ passed }}</h2>
+	<h1>Email: {{ email }}</h1>
+	<h1>Password: {{ password }}</h1>
+	<br/>
+	<h2>I found this info:</h2>
+	Name: {{pw_to_check.name}}<br/>
+	Email: {{pw_to_check.email}}<br/>
+	PW: {{pw_to_check.password_hash}}<br/>
+	<br/>
+	Passed: {{ passed }}
+	
 
-
-</div>
-    <!-- <img src="{{ url_for('static', filename='images/world.jpg') }}" class="img-fluid" style="max-width: 80%; height: 50vh;" alt="World image"> -->
 {% else %}
-<h1>Enter your email and PW</h1>
+	<h1>What's Your Email and Password?</h1>
+	<br/>
+	<form method="POST">
+		{{ form.hidden_tag() }}
 
-<div class="container" style="max-width: 500px; margin-top: 50px;">
+		{{ form.email.label(class="form-label") }}
 
-    <form method="post">
-        {{ form.hidden_tag() }}
+		{{ form.email(class="form-control") }}
+		<br/>
 
-        <div class="mb-3"> {{ form.email.label(class="form-label") }}
-            {{ form.email(class="form-control") }}
-        </div>
+		{{ form.password_hash.label(class="form-label") }}
 
-        <div class="mb-3"> {{ form.password_hash.label(class="form-label") }}
-            {{ form.password_hash(class="form-control") }}
-        </div>
+		{{ form.password_hash(class="form-control") }}
+		<br/>
 
-        <br> {{ form.submit(class="btn btn-secondary") }}
-    </form>
+		{{ form.submit(class="btn btn-secondary") }}
 
-</div>
-    {% endif %}
 
-    {% endblock %}
+	</form>
+
+
+
+{% endif %}
+
+{% endblock %}

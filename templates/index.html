@@ -1,10 +1,43 @@
 {% extends 'base.html' %}
 
-{% block title %}Index Page{% endblock %}
-
 {% block content %}
-  <div class="container mt-5">
-    <h1>Welcome to the Index Page!</h1>
-    <p>This is your main content.</p>
-  </div>
+
+<br/>
+
+<div class="p-5 mb-4 bg-light rounded-3">
+	<div class="container-fluid py-5">
+	  <h1 class="display-5 fw-bold">Welcome to Flasker!</h1>
+	  <p class="col-md-8 fs-4">This is a custom built blog using Python and Flask. Check out the latest posts below.</p>
+	  <a class="btn btn-secondary btn-lg" href="{{ url_for('add_post') }}" role="button">Create Post</a>
+	</div>
+</div>
+
+<br/>
+<h3>Latest Blog Posts</h3>
+<br/>
+
+{% for post in posts %}
+	<div class="shadow p-3 mb-5 bg-body rounded">
+		<div class="row">
+			<div class="col-2">
+				{% if post.poster.profile_pic %}
+					<img src="{{ url_for('static', filename='images/' + post.poster.profile_pic)}}" class="img-fluid rounded-start" style="max-height: 150px;">
+				{% else %}
+					<img src="{{ url_for('static', filename='images/default_profile_pic.png')}}" class="img-fluid rounded-start" style="max-height: 150px;">
+				{% endif %}
+			</div>
+
+			<div class="col-10">
+				<h2><a href="{{ url_for('post', id=post.id)}}" style="text-decoration: none; color: black;">{{ post.title }}</a></h2>
+				<small class="text-muted">By: {{ post.poster.name }} | {{ post.date_posted.strftime('%Y-%m-%d') }}</small> 
+				<br/><br/>
+				
+				<p class="card-text">{{ post.content|striptags|truncate(200) }}</p> 
+				
+				<a href="{{ url_for('post', id=post.id)}}" class="btn btn-outline-secondary btn-sm">Read More...</a>
+			</div>
+		</div>
+	</div>
+{% endfor %}
+
 {% endblock %}
